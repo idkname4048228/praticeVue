@@ -14,7 +14,7 @@ const passwordInput = ref(null)
 const questionInput = ref(null)
 
 function getVerificationCode() {
-  fetch('http://localhost:3000/api/verification', {
+  fetch('http://localhost:3000/api/user/verification', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ function loginSubmit() {
     password: password.value
   }
 
-  fetch('http://localhost:3000/api/login', {
+  fetch('http://localhost:3000/api/user/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

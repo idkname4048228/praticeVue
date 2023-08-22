@@ -38,20 +38,10 @@ router.beforeEach(async (to, from) => {
   }
   return true
 })
-
-router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    document.getElementById('app').style.backgroundColor = 'darkgrey';
-  } else {
-    document.getElementById('app').style.backgroundColor = '#fff';
-  }
-  next();
-});
-
 async function checkAuth() {
   const token = sessionStorage.getItem("token");
   let valid = false
-  await fetch("http://localhost:3000/api/auth", {
+  await fetch("http://localhost:3000/api/user/auth", {
     headers: {
       authorization: `${token}`,
     },

@@ -4,6 +4,8 @@ import ChatLog from './ChatLog.vue'
 import TypeArea from './TypeArea.vue'
 import router from '../../router'
 
+const emit = defineEmits(['little-game-start', 'show-dialog'])
+
 const props = defineProps({
   account: String,
   isChating: Boolean
@@ -21,26 +23,38 @@ function handleMessage(content) {
     typeRef.value.clearTypeArea()
     const token = sessionStorage.getItem('token')
     setTimeout(() => {
-      fetch('http://localhost:3000/api/command', {
+      fetch(`http://localhost:3000/api/command/${userMessage.value.split(' ')[0]}`, {
         method: 'POST',
         headers: {
           authorization: `${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ content: content })
+        body: JSON.stringify({ target: userMessage.value.split(' ')[1] })
       })
         .then((response) => response.json())
-        .then((result) => {
-          logRef.value.botSendMessage(result.content)
-          setTimeout(() => {
-            if (result.requireRefreshing) {
-              router.push('/')
-            }
-          }, 500)
-        })
+        .then((result) => handleResult(result))
         .catch((error) => {
           console.log(error)
         })
+    }, 500)
+  }
+}
+
+function handleResult(result) {
+  if (result.imgSrc && !result.content) {
+    logRef.value.botSendPicture(`http://localhost:3000/img/${result.imgSrc}`)
+  } else {
+    logRef.value.botSendMessage(result.content)
+    emit('show-dialog', result.imgSrc, "Huh?")
+  }
+
+  if (result.game) {
+    emit('little-game-start', result.size)
+  }
+  if (result.requireRefreshing) {
+    setTimeout(() => {
+      router.push('/login')
+      sessionStorage.clear('token')
     }, 500)
   }
 }

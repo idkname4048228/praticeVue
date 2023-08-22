@@ -1,0 +1,11 @@
+
+
+.game-container {
+    --size: 5;
+    grid-row: 2/3;
+    grid-column: 2/3;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+

@@ -6,20 +6,36 @@ import SpadeIcon from './icons/PokerIcons/IconSpade.vue'
 import DiamondIcon from './icons/PokerIcons/IconDiamond.vue'
 
 const props = defineProps({
-  symbol: String,
-  number: String,
-  isRed: Boolean,
-  isFlip: Boolean
+  attribute: Object
 })
 
 const icons = {
-  heart: HeartIcon,
-  spade: SpadeIcon,
-  club: ClubIcon,
-  diamond: DiamondIcon
+  0: SpadeIcon,
+  1: HeartIcon,
+  2: DiamondIcon,
+  3: ClubIcon
 }
 
-const currentIcon = computed(() => icons[props.symbol])
+const iconIndex = computed(() => Math.floor(props.attribute.number / 13))
+const currentIcon = computed(() => icons[iconIndex.value])
+const number = computed(() => {
+  let rank = (props.attribute.number % 13) + 1
+  if (rank == 1) {
+    return 'A'
+  }
+  if (rank == 11) {
+    return 'J'
+  }
+  if (rank == 12) {
+    return 'Q'
+  }
+  if (rank == 13) {
+    return 'K'
+  }
+  return rank
+})
+const isRed = computed(() => iconIndex.value == 1 || iconIndex.value == 2)
+const isFlip = computed(() => props.attribute.flip)
 </script>
 
 <template>

@@ -16,7 +16,7 @@ function registerSubmit() {
     registerPW: checkPassword.value
   }
 
-  fetch('http://localhost:3000/api/register', {
+  fetch('http://localhost:3000/api/user/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

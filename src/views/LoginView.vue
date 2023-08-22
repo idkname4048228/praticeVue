@@ -6,11 +6,11 @@ import WarningDialog from '../components/dialogs/WarningDialog.vue'
 
 const isLogin = ref(true)
 const dialogText = ref('Failed Failed Failed Failed Failed Failed Failed Failed Failed Failed')
-const dialogSwitch = ref(false)
+const dialogRef = ref()
 
 function showDialog(showMsg) {
   dialogText.value = showMsg
-  dialogSwitch.value = true
+  dialogRef.value.open()
 }
 </script>
 
@@ -21,7 +21,7 @@ function showDialog(showMsg) {
       <RegisterDialog id="register" @show-dialog="showDialog" @toggle="isLogin = !isLogin" />
     </div>
   </div>
-  <WarningDialog :showSwitch="dialogSwitch" @dialog-close="dialogSwitch = false">
+  <WarningDialog ref="dialogRef">
     <template v-slot:waringText>
       {{ dialogText }}
     </template>
@@ -78,5 +78,11 @@ function showDialog(showMsg) {
 
 .registerPage {
   transform: rotateY(-180deg);
+}
+</style>
+
+<style>
+#app {
+  background-color: darkgrey;
 }
 </style>

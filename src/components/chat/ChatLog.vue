@@ -6,22 +6,34 @@ const messages = reactive([])
 // message = {
 //  id:       Number,
 //  content:  String,
-//  user:     Boolean
+//  user:     Boolean.
+//  isPicture:Boolean
 //}
 function botSendMessage(content) {
   // content = content.replace(/\n/g, '<br />')
   messages.push({
     id: id++,
     content: content,
-    user: false
+    user: false,
+    isPicture: false
   })
   // chatAnimation()
+}
+
+function botSendPicture(source) {
+  messages.push({
+    id: id++,
+    content: source,
+    user: false,
+    isPicture: true
+  })
 }
 
 // TODO
 // 你已經死了、小遊戲、rickroll
 function userSendMessage(message) {
-  if (message.length == 0 || !/[\S]/.test(message)) {  // 測試是否所有字元都是空白字符（空格、換行等）
+  if (message.length == 0 || !/[\S]/.test(message)) {
+    // 測試是否所有字元都是空白字符（空格、換行等）
     return false
   }
   messages.push({
@@ -34,6 +46,7 @@ function userSendMessage(message) {
 
 defineExpose({
   botSendMessage,
+  botSendPicture,
   userSendMessage
 })
 </script>
@@ -42,7 +55,10 @@ defineExpose({
   <div id="chat-logs">
     <transition-group name="message">
       <template v-for="message in messages.slice().reverse()" :key="message.id">
-        <div class="text-log" :class="[message.user ? 'user' : 'bot']" >
+        <div v-if="message.isPicture" class="text-log" :class="[message.user ? 'user' : 'bot']">
+          <img :src="message.content" alt="never gonna give you up" />
+        </div>
+        <div v-else class="text-log" :class="[message.user ? 'user' : 'bot']">
           {{ message.content }}
         </div>
       </template>
@@ -74,6 +90,11 @@ defineExpose({
   margin: 1vh 1.5vw;
   border-radius: 1vh;
   white-space: pre-wrap;
+}
+
+img {
+  width: 100%;
+  aspect-ratio: 4/3;
 }
 
 .user {
